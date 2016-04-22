@@ -38,8 +38,3 @@ def about(bot,trigger):
 def famous(bot,trigger):
     """Links to examples of famous INTPs."""
     bot.reply("Some famous INTPs: " + bot.config.mbti.famous)
-
-@commands('greet')
-def greet(bot,trigger):
-    """Greets another user."""
-    bot.say("Greetings, " + trigger.group(2) + "!")
