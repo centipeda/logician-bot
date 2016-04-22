@@ -7,7 +7,7 @@ def greet(bot,trigger):
     """Greets another user."""
     bot.say("Greetings, " + trigger.group(2) + "!")
 
-@sopel.module.nickname_commands("Thanks(\!|\.)?")
+@sopel.module.nickname_commands("(T|t)hanks(\!|\.)?")
 def thank(bot,trigger):
     """Says 'You're welcome'."""
     bot.reply("No problem!")
