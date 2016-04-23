@@ -9,11 +9,12 @@ import string
 import random
 import traceback
 from StringIO import StringIO
-from sopel.module import commands,require_admin
+from sopel.module import commands,require_admin,require_privmsg
 from sopel.config.types import StaticSection, ValidatedAttribute
 from sopel.db import SopelDB
 import sqlite3
 
+# columns in order - ID,raw,encoded,solved,first
 class CipuzzleSection(StaticSection):
     alpha = list(string.ascii_lowercase)
     alphabet = ValidatedAttribute('alphabet',list,default=alpha)
@@ -22,32 +23,40 @@ def setup(bot):
     bot.config.define_section('cipherpuzzle',CipuzzleSection)
     bot.db.connect()
 
+@commands("cipuzzle","cipherpuzzle")
+def aboutcip(bot,trigger):
+    bot.reply("Cipher-puzzle is a text-based puzzle game wherein each letter of a phrase is encrypted with something similar to a simple Caesar replacement cipher.",trigger.sender)
+    bot.reply("Your goal is to decrypt a message and send it via $solve.",trigger.sender)
+    bot.reply("New puzzles of your own can be sent with $addpuzzle via private message, and they will be added into Logic's database, provided they aren't thinly disguised SQL injection attacks.",trigger.sender)
+    bot.reply("Start by checking the list of puzzles via $listpuzzles. Good luck!",trigger.sender)
+
+@require_privmsg("You should probably submit that via /msg.")
 @commands("addpuzzle","submit")
 def addpuzzle(bot,trigger):
     """Adds a puzzle to the Logician database."""
-    if trigger.is_privmsg:
-        bot.reply("Encoding!")
-        coded = encode(bot,trigger.group(2))
-        bot.reply("Encoded: " + coded[0])
-        bot.reply("Given: " + coded[1])
-        try:
-            bot.db.execute("INSERT INTO puzzlelist (raw,encoded) VALUES (?,?,?);",(coded[1],coded[0],0))
-        except sqlite3.OperationalError:
-            bot.say("...Hey, did you try an SQL injection attack?")
+    bot.reply("Encoding!")
+    coded = encode(bot,trigger.group(2))
+    bot.reply("Encoded: " + coded[0])
+    bot.reply("Given: " + coded[1])
+    try:
+        bot.db.execute("INSERT INTO puzzlelist (raw,encoded,solved,owner) VALUES (?,?,?,?);",[coded[1],coded[0],0,trigger.sender])
+    except sqlite3.OperationalError:
+        bot.say("...Hey, did you try an SQL injection attack?")
 
-        x = bot.db.execute("SELECT * FROM puzzlelist WHERE ID = (SELECT MAX(ID) FROM puzzlelist);")
-        id = [x for x in x][0]
-        bot.reply("Puzzle ID is " + id)
+    x = bot.db.execute("SELECT * FROM puzzlelist WHERE ID = (SELECT MAX(ID) FROM puzzlelist);")
+    id = str([x for x in x][0][0])
+    bot.reply("Puzzle ID is " + id)
 
 @commands("listpuzzles","puzzlelist","showpuzzles")
 def listpuzzles(bot,trigger):
     """Outputs all the puzzles currently in the Logician cipherpuzzle database."""
-    p = bot.db.execute("SELECT id, encoded FROM puzzlelist;")
+    p = bot.db.execute("SELECT id, encoded, owner FROM puzzlelist;")
     puzzles = [p for p in p]
     bot.say("Puzzles in database:")
     for puzzle in puzzles:
-        bot.say("Puzzle #{}: {}".format(puzzle[0],puzzle[1]))
+        bot.say("Puzzle #{}: '{}', added by {}".format(puzzle[0],puzzle[1],puzzle[2]))
 
+@require_privmsg("Ask via /msg.")
 @commands("showsolved")
 def showsolved(bot,trigger):
     """Outputs solutions to currently solved puzzles."""
@@ -57,6 +66,7 @@ def showsolved(bot,trigger):
     for puzzle in solved:
         bot.say("Puzzle #{}: {}".format(puzzle[0],puzzle[2]),trigger.sender)
         bot.say("Solution: {}".format(puzzle[1]),trigger.sender)
+        bot.say("First solved by {}".format(puzzle[4])
         
 
 @commands("solve","solvepuzzle","solvefor")
@@ -73,7 +83,7 @@ def solve(bot,trigger):
         p = bot.db.execute("SELECT * FROM puzzlelist where ID = ?;",(puzzleid,))
         puzzle = [p for p in p]
         if (str(puzzle[0][1]) == str(attempt)):
-            bot.reply("Yep, that's it. '{}' is the answer to puzzle #{}.".format(attempt,puzzleid))
+            bot.reply("Yep, that's it! '{}' is the answer to puzzle #{}.".format(attempt,puzzleid))
             bot.db.execute("UPDATE puzzlelist SET solved = 1 WHERE ID = ?;",(puzzleid,))
         else:
             bot.reply("Sorry, that's not it. Try again?")

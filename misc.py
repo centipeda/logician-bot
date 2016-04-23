@@ -10,7 +10,7 @@ from sopel.config.types import StaticSection,ValidatedAttribute
 class MiscConfig(StaticSection):
     ballansw = ["Yes.",
                 "Not in any conceivable scenario.",
-                "Undoubtably.",
+                "Undoubtedly.",
                 "I doubt it, for some reason.",
                 "Time will tell.",
                 "Why do you need to know?",
@@ -20,6 +20,9 @@ class MiscConfig(StaticSection):
                 "Ask another time.",
                 "That seems plausible.",
                 "That would be... unlikely.",
+                "But... why?",
+                "Nope.",
+                "Maybe!",
                 "Sorry, what was that?"]
     answers = ValidatedAttribute("answers",list,default=ballansw)
 
@@ -40,6 +43,10 @@ def fliptable(bot,trigger):
 @command("unflip")
 def unfliptable(bot,trigger):
     bot.say("┬─┬﻿ ノ( ゜-゜ノ)")
+
+@command("lenny")
+def lenny(bot,trigger):
+    lennyface(bot,trigger)
 
 @rule("[Yy]ou like that, Logic(ian)?")
 def lennyface(bot,trigger):

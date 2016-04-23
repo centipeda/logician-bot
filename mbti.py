@@ -16,25 +16,29 @@ class MbtiSection(StaticSection):
 
 def setup(bot):
     bot.config.define_section('mbti',MbtiSection)
+    
+@commands('intp')
+def intp(bot,trigger):
+    """Multiple INTP-related things.
+    Try description, subreddit, or famous as arguments."""
+    if trigger.group(2) == "description":
+        list_descriptions(bot,trigger)
+    elif trigger.group(2) == "subreddit":
+        subreddit(bot,trigger)
+    elif trigger.group(2) == "famous":
+        famous(bot,trigger)
 
-@commands('description','descriptions')
+## Too lazy to retype this stuff. ##
 def list_descriptions(bot,trigger):
     """Provides links to descriptions of the INTP type."""
     bot.say('Some INTP descriptions:')
     for link in bot.config.mbti.descriptions:
         bot.say(link)
-        
-@commands('subreddit','subreddits')
+    
 def subreddit(bot,trigger):
     """Provides links to MBTI-related subreddits."""
     bot.reply(bot.config.mbti.subreddit)
 
-@commands('about','aboutme')
-def about(bot,trigger):
-    """Basic information about Logician."""
-    bot.say("I\'m a bot originally created by centipeda for #reddit-intp. I run using Sopel. I don\'t do very much right now, but more coming soon!")
-
-@commands('famous','famousintp')
 def famous(bot,trigger):
     """Links to examples of famous INTPs."""
     bot.reply("Some famous INTPs: " + bot.config.mbti.famous)
