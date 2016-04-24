@@ -15,7 +15,8 @@ def setup(bot):
     
 @module.commands("startaz","azgame","azstart")
 def startaz(bot,trigger):
-    """Starts a game of az."""
+    """Starts a game of az.
+    Usage: $startaz"""
     if bot.config.azgame.gaming:
         bot.reply("End the current game with $endaz first.")
     else:
@@ -29,7 +30,8 @@ def startaz(bot,trigger):
 
 @module.commands("endaz","azquit","azend","quitaz")
 def end_az(bot,trigger):
-    """Ends a game of az."""
+    """Ends a game of az.
+    Usage: $endaz"""
     if bot.config.azgame.gaming:
         bot.config.azgame.gaming = False
         bot.say("Game ended, the winning word was {}. Blame {}!".format(bot.config.azgame.answer,
@@ -38,7 +40,8 @@ def end_az(bot,trigger):
 @module.commands("az")
 def attempt_az(bot,trigger):
     """Tries to redefine the word range by seeing if a given word is in the range.
-    If the solution is given, the winner is recognized and the game ends."""
+    If the solution is given, the winner is recognized and the game ends.
+    Usage: $az word"""
     if not bot.config.azgame.gaming:
         bot.reply("Start a game using $startaz first.")
     elif trigger.group(2) is None or len(trigger.group(2).split()) > 1:
@@ -63,7 +66,8 @@ def attempt_az(bot,trigger):
 
 @module.commands("azrange","rangeaz")
 def azrange(bot,trigger):
-    """Outputs the current range of a game of az."""
+    """Outputs the current range of a game of az.
+    Usage: $azrange"""
     if bot.config.azgame.gaming:
         bot.say("Range is {} -- {}".format(bot.config.azgame.wordlist[0],
                                            bot.config.azgame.wordlist[-1]))
@@ -73,7 +77,8 @@ def azrange(bot,trigger):
 @module.require_admin(message="You're not one of my admins!")
 @module.commands("azanswer","azsolution")
 def azanswer(bot,trigger):
-    """Outputs the answer of the current game of az. Admin-only command."""
+    """Outputs the answer of the current game of az. Admin-only command.
+    Usage: $azanswer"""
     if bot.config.azgame.gaming:
         bot.say("The answer is " + bot.config.azgame.answer + ".")
         bot.say("...Cheater.")
@@ -83,7 +88,8 @@ def azanswer(bot,trigger):
 @module.commands("setaz","azset")
 def azset(bot,trigger):
     """Changes the answer to a game of az.
-    Be careful that the new answer is within the current range, or weird stuff happens."""
+    Be careful that the new answer is within the current range, or weird stuff happens.
+    Usage: $azset newanswer"""
     if bot.config.azgame.gaming:
         bot.config.azgame.answer = trigger.group(2)
         bot.say("Answer set to " + bot.config.azgame.answer,trigger.sender)

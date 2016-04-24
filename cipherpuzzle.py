@@ -25,15 +25,18 @@ def setup(bot):
 
 @commands("cipuzzle","cipherpuzzle")
 def aboutcip(bot,trigger):
-    bot.reply("Cipher-puzzle is a text-based puzzle game wherein each letter of a phrase is encrypted with something similar to a simple Caesar replacement cipher.",trigger.sender)
-    bot.reply("Your goal is to decrypt a message and send it via $solve.",trigger.sender)
-    bot.reply("New puzzles of your own can be sent with $addpuzzle via private message, and they will be added into Logic's database, provided they aren't thinly disguised SQL injection attacks.",trigger.sender)
-    bot.reply("Start by checking the list of puzzles via $listpuzzles. Good luck!",trigger.sender)
+    """Displays information about cipherpuzzle.
+    Usage: $cipuzzle"""
+    bot.reply("Cipher-puzzle is a text-based puzzle game wherein each letter of a phrase is encrypted with something similar to a simple Caesar replacement cipher.",trigger.nick)
+    bot.reply("Your goal is to decrypt a message and send it via $solve.",trigger.nick)
+    bot.reply("New puzzles of your own can be sent with $addpuzzle via private message, and they will be added into Logic's database, provided they aren't thinly disguised SQL injection attacks.",trigger.nick)
+    bot.reply("Start by checking the list of puzzles via $listpuzzles. Good luck!",trigger.nick)
 
 @require_privmsg("You should probably submit that via /msg.")
 @commands("addpuzzle","submit")
 def addpuzzle(bot,trigger):
-    """Adds a puzzle to the Logician database."""
+    """Adds a puzzle to the Logician database.
+    Usage: $addpuzzle puzzle"""
     bot.reply("Encoding!")
     coded = encode(bot,trigger.group(2))
     bot.reply("Encoded: " + coded[0])
@@ -49,7 +52,8 @@ def addpuzzle(bot,trigger):
 
 @commands("listpuzzles","puzzlelist","showpuzzles")
 def listpuzzles(bot,trigger):
-    """Outputs all the puzzles currently in the Logician cipherpuzzle database."""
+    """Outputs all the puzzles currently in the Logician cipherpuzzle database.
+    Usage: $listpuzzles"""
     p = bot.db.execute("SELECT id, encoded, owner FROM puzzlelist;")
     puzzles = [p for p in p]
     bot.say("Puzzles in database:")
@@ -59,14 +63,15 @@ def listpuzzles(bot,trigger):
 @require_privmsg("Ask via /msg.")
 @commands("showsolved")
 def showsolved(bot,trigger):
-    """Outputs solutions to currently solved puzzles."""
+    """Outputs solutions to currently solved puzzles.
+    Usage: /msg (or /query) Logician $showsolved"""
     p = bot.db.execute("SELECT * FROM puzzlelist where solved = 1;")
     solved = [p for p in p]
     bot.say("Currently solved puzzles:",trigger.sender)
     for puzzle in solved:
         bot.say("Puzzle #{}: {}".format(puzzle[0],puzzle[2]),trigger.sender)
         bot.say("Solution: {}".format(puzzle[1]),trigger.sender)
-        bot.say("First solved by {}".format(puzzle[4])
+        bot.say("First solved by {}".format(puzzle[4]))
         
 
 @commands("solve","solvepuzzle","solvefor")
@@ -102,6 +107,7 @@ def removepuzzle(bot,trigger):
     pass
 
 def encode(bot,string):
+    """Used by $addpuzzle to encode puzzles."""
     alpha = bot.config.cipherpuzzle.alphabet
     solved = string
     shufflemap = alpha[:]

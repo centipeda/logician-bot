@@ -3,6 +3,12 @@
 from sopel.module import commands
 from sopel.config.types import StaticSection, ValidatedAttribute
 
+# This feels really inefficient, but I don't have any better ideas.
+types = ["intp","entp","intj","entj",
+         "enfj","infj","infp","enfp",
+         "estp","istp","esfp","isfp",
+         "isfj","estj","istj","esfj"]
+
 class MbtiSection(StaticSection):
     descs = ['http://personalitycafe.com/intp-forum-thinkers/94751-intp-jungian-cognitive-function-analysis.htm',
                     'http://www.intp.org/intprofile.html',
@@ -16,12 +22,25 @@ class MbtiSection(StaticSection):
 
 def setup(bot):
     bot.config.define_section('mbti',MbtiSection)
+
+@commands('mbti')
+def mbti(bot,trigger):
+    if trigger.group(2) is None:
+        bot.say("Try $mbti [type|test].")
+    elif trigger.group(2).lower() in types:
+        bot.say("https://www.16personalities.com/{}-personality".format(trigger.group(2).lower()))
+        bot.say("http://www.personalitypage.com/{}.html".format(trigger.group(2).upper()))
+    elif trigger.group(2) == "test":
+        bot.say("https://www.16personalities.com/free-personality-test")
+        
     
 @commands('intp')
 def intp(bot,trigger):
     """Multiple INTP-related things.
     Try description, subreddit, or famous as arguments."""
-    if trigger.group(2) == "description":
+    if trigger.group(2) is None:
+        bot.say("Try $intp [description|subreddit|famous].")
+    elif trigger.group(2) == "description":
         list_descriptions(bot,trigger)
     elif trigger.group(2) == "subreddit":
         subreddit(bot,trigger)

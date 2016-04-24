@@ -8,28 +8,40 @@ import random
 
 class CourtesyConfig(StaticSection):
     greets = ["Hi there, ","Hey, ","Yo, ","Greetings, ","Hello, "]
+    dogreet = False
     again = None
     greetings = ValidatedAttribute("greetings",list,default=greets)
+    greet = ValidatedAttribute("do_greet",bool,default=dogreet)
+    
 
 def setup(bot):
     bot.config.define_section("courtesy",CourtesyConfig)
 
-"""@sopel.module.event(None)
+@sopel.module.event("JOIN")
 @sopel.module.rule(".*")
-def greet_newuser(bot,trigger):
-    pass # Too spammy, maybe
-    if trigger.sender != bot.nick:
-        greet = random.choice(greetings)+trigger.nick+". Welcome to #reddit-intp, I'm Logician. Type $help for more on what I can do."
-        bot.say(greet)"""
+def greetjoin(bot,trigger):
+    """Greets users on entering."""
+    if bot.config.courtesy.greet and trigger.sender == "#reddit-intp" and trigger.group(1) != bot.nick:
+        bot.say("Welcome to {}! Type $help to find out more about what I can do.".format(trigger.sender))
 
-@commands('about','aboutme')
+
+@sopel.module.require_admin("Not an admin.")
+@sopel.module.commands("togglegreet")
+def togglegreet(bot,trigger):
+    """Changes whether Logician greets users upon entering."""
+    bot.config.courtesy.greet = not bot.config.courtesy.greet
+    bot.say("Greet setting toggled.")
+
+@sopel.module.commands('about','aboutme')
 def about(bot,trigger):
-    """Basic information about Logician."""
-    bot.say("I\'m a bot originally created by centipeda for #reddit-intp. I run using Sopel. Type $help for a full list of what I can do.")
+    """Displays basic information about Logician.
+    Usage: $about"""
+    bot.say("I\'m a bot originally created by centipeda for #reddit-intp. I run using Sopel (https://sopel.chat). Type $help for a full list of what I can do.")
 
 @sopel.module.commands('greet')
 def greet(bot,trigger):
-    """Greets another user."""
+    """Greets another user.
+    Usage: $greet username"""
     if trigger.group(2) == bot.config.core.owner:
         bot.say("No need, I already know him.")
     elif trigger.group(2) == bot.nick or trigger.group(2) == "Logic":
@@ -44,8 +56,14 @@ def greet(bot,trigger):
 
 @sopel.module.commands('fight')
 def nofight(bot,trigger):
-    """Logician's a pacifist."""
+    """Logician's a pacifist.
+    Usage: $fight"""
     bot.say("No!")
+
+@sopel.module.rule("(Logic(ian)? is (the best|the superior bot|boss|the best bot))|(INTP(s)? are the best( type)?(.)?)")
+def best(bot,trigger):
+    """Logician is the best."""
+    bot.say("Damn straight.")
 
 @sopel.module.rule("[Tt]hanks, Logic(ian)?([!.])?")
 def thank(bot,trigger):
@@ -68,7 +86,7 @@ def unsure(bot,trigger):
     bot.say("Umm...")
     bot.say("Yes!")
 
-@sopel.module.rule("I (hate|dislike|don't want) (this bot|Logic(ian)?)*")
+@sopel.module.rule("((I)? (hate|dislike|don't want) (this bot|Logic(ian)?)*)|((god)?dammit) Logic(ian)?)*")
 def sad(bot,tprigger):
     """Not upset, just saddened."""
     bot.say(":(")

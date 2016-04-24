@@ -3,7 +3,7 @@
 
 import random
 
-from sopel.module import commands as command
+from sopel.module import commands,require_admin
 from sopel.module import rule
 from sopel.config.types import StaticSection,ValidatedAttribute
 
@@ -27,27 +27,41 @@ class MiscConfig(StaticSection):
     answers = ValidatedAttribute("answers",list,default=ballansw)
 
 def setup(bot):
-    bot.config.define_section('miscellaneous',MiscConfig)
+    bot.config.define_section('misc',MiscConfig)
 
-@command("8ball","8b","eightball")
+@commands("8ball","8b","eightball")
 def eightball(bot,trigger):
+    """Consult the magic 8-ball for answers."""
     if trigger.group(2)[-1] != "?":
         bot.reply("Please ask a yes or no question.")
     else:
-        bot.reply(random.choice(bot.config.miscellaneous.answers))
+        # bot.reply(random.choice(bot.config.miscellaneous.answers))
+        total = 0
+        for char in trigger.group(2)[::-1]:
+            total += ord(char)
+        bot.reply(bot.config.misc.answers[total % len(bot.config.misc.answers)])
 
-@command("fliptable")
+@commands("fliptable")
 def fliptable(bot,trigger):
+    """Usage: $fliptable"""
     bot.say("(╯°□°)╯︵ ┻━┻")
 
-@command("unflip")
+@commands("unflip")
 def unfliptable(bot,trigger):
+    """Usage: $unfliptable"""
     bot.say("┬─┬﻿ ノ( ゜-゜ノ)")
 
-@command("lenny")
+@commands("lenny")
 def lenny(bot,trigger):
+    """Usage: $lenny"""
     lennyface(bot,trigger)
 
 @rule("[Yy]ou like that, Logic(ian)?")
 def lennyface(bot,trigger):
     bot.say("( ͡° ͜ʖ ͡°)")
+
+@require_admin()
+@commands("throw")
+def throw(bot,trigger):
+    """Raises an exception."""
+    raise Exception
