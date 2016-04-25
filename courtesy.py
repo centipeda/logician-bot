@@ -86,7 +86,7 @@ def unsure(bot,trigger):
     bot.say("Umm...")
     bot.say("Yes!")
 
-@sopel.module.rule("((I)? (hate|dislike|don't want) (this bot|Logic(ian)?)*)|((god)?dammit) Logic(ian)?)*")
+@sopel.module.rule("((I)? (hate|dislike|don't want) (this bot|Logic(ian)?(.)?))|((god)?dammit Logic(ian)?(.)?)")
 def sad(bot,tprigger):
     """Not upset, just saddened."""
     bot.say(":(")
