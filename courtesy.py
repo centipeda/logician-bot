@@ -18,12 +18,11 @@ def setup(bot):
     bot.config.define_section("courtesy",CourtesyConfig)
 
 @sopel.module.event("JOIN")
-@sopel.module.rule(".*")
+@sopel.module.rule("(.)*")
 def greetjoin(bot,trigger):
     """Greets users on entering."""
     if bot.config.courtesy.greet and trigger.sender == "#reddit-intp" and trigger.group(1) != bot.nick:
-        bot.say("Welcome to {}! Type $help to find out more about what I can do.".format(trigger.sender))
-
+        bot.say("Welcome to {}! Type $help to find out more about what I can do. I'm normally pretty quiet in chat, but if you say the right things I might just respond.".format(trigger.sender))
 
 @sopel.module.require_admin("Not an admin.")
 @sopel.module.commands("togglegreet")
@@ -65,7 +64,7 @@ def thanks(bot,trigger):
     """Logician appreciates being complimented."""
     bot.say("Thank you.")
 
-@sopel.module.rule("(I|We) (like|love) Logic(ian)?(.)?")
+@sopel.module.rule("(I|We) (like|love|appreciate|am interested in| are interested in) Logic(ian)?(.)?")
 def wink(bot,trigger):
     """Of course, Logician also appreciates affection."""
     bot.say(";)")
@@ -102,7 +101,7 @@ def unsure(bot,trigger):
     bot.say("Yes!")
 
 @sopel.module.rule("((I |We |They |You )?(hate|hates|dislike|dislikes|doesn't want|don't want) (this bot|Logic(ian)?(.)?))|((god)?dammit Logic(ian)?(.)?)")
-def sad(bot,tprigger):
+def sad(bot,trigger):
     """Not upset, just saddened."""
     bot.say(":(")
                    
