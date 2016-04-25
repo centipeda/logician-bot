@@ -27,6 +27,7 @@ def startaz(bot,trigger):
         bot.config.azgame.answer = random.choice(blist)
         bot.say("Range is {} -- {}".format(blist[0],blist[-1]))
         bot.config.azgame.gaming = True
+        bot.db.close()
 
 @module.commands("endaz","azquit","azend","quitaz")
 def end_az(bot,trigger):
@@ -63,6 +64,14 @@ def attempt_az(bot,trigger):
                 wlist = wlist[:(wlist.index(attempt) + 1):]
                 bot.say("Close, but no cigar. Range is {} -- {}".format(wlist[0],attempt))
             bot.config.azgame.wordlist = wlist[::]
+
+@module.rule("(.)*")
+def freeattempt(bot,trigger):
+    """Makes it so $az isn't needed to play."""
+    if bot.config.azgame.gaming and not True: # Disabled for now.
+        if len(trigger.group(1).split()) == 1:
+            attempt_az(bot,trigger.group(1))
+        
 
 @module.commands("azrange","rangeaz")
 def azrange(bot,trigger):

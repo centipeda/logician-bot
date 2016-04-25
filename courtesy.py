@@ -60,6 +60,21 @@ def nofight(bot,trigger):
     Usage: $fight"""
     bot.say("No!")
 
+@sopel.module.rule("(Nice|Good|Hard)( game | az | answer | one )?(,)? Logic(ian)?(.)?")
+def thanks(bot,trigger):
+    """Logician appreciates being complimented."""
+    bot.say("Thank you.")
+
+@sopel.module.rule("(I|We) (like|love) Logic(ian)?(.)?")
+def wink(bot,trigger):
+    """Of course, Logician also appreciates affection."""
+    bot.say(";)")
+
+@sopel.module.rule("Give( us)? (an easier|an easy) (word|answer|az| game)(,)? Logic(ian)?(.)?")
+def no(bot,trigger):
+    """Logician doesn't let up."""
+    bot.say("No.")
+
 @sopel.module.rule("(Logic(ian)? is (the best|the superior bot|boss|the best bot))|(INTP(s)? are the best( type)?(.)?)")
 def best(bot,trigger):
     """Logician is the best."""
@@ -86,7 +101,7 @@ def unsure(bot,trigger):
     bot.say("Umm...")
     bot.say("Yes!")
 
-@sopel.module.rule("((I)? (hate|dislike|don't want) (this bot|Logic(ian)?(.)?))|((god)?dammit Logic(ian)?(.)?)")
+@sopel.module.rule("((I |We |They |You )?(hate|hates|dislike|dislikes|doesn't want|don't want) (this bot|Logic(ian)?(.)?))|((god)?dammit Logic(ian)?(.)?)")
 def sad(bot,tprigger):
     """Not upset, just saddened."""
     bot.say(":(")
