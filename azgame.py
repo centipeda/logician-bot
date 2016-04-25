@@ -14,6 +14,7 @@ def setup(bot):
     bot.db.connect()
     bot.config.azgame.gaming = None
     bot.config.azgame.cheated = False
+    bot.config.azgame.startchan = None
     
 @module.commands("startaz","azgame","azstart")
 def startaz(bot,trigger):
@@ -29,16 +30,20 @@ def startaz(bot,trigger):
         bot.config.azgame.answer = random.choice(blist)
         bot.say("Range is {} -- {}".format(blist[0],blist[-1]))
         bot.config.azgame.gaming = True
-        bot.db.close()
+        if not trigger.is_privmsg:
+            bot.config.azgame.startchan = trigger.sender
 
 @module.commands("endaz","azquit","azend","quitaz")
 def end_az(bot,trigger):
     """Ends a game of az.
     Usage: $endaz"""
-    if bot.config.azgame.gaming:
-        bot.config.azgame.gaming = False
-        bot.say("Game ended, the winning word was {}. Blame {}!".format(bot.config.azgame.answer,
-                                                                    trigger.nick))
+    if bot.config.azgame.gaming and bot.config.azgame.startchan is not None:
+        if trigger.sender == bot.config.azgame.startchan or trigger.sender == bot.owner:
+            bot.config.azgame.gaming = False    
+            bot.say("Game ended, the winning word was {}. Blame {}!".format(bot.config.azgame.answer,
+                                                                            trigger.nick))
+    else:
+        bot.reply("Start a game using $startaz first.")
 
 @module.commands("az")
 def attempt_az(bot,trigger,word=None):
@@ -92,7 +97,7 @@ def az_win(bot,trigger):
 @module.rule("(.)*")
 def freeattempt(bot,trigger):
     """Makes it so $az isn't needed to play."""
-    if bot.config.azgame.gaming:
+    if bot.config.azgame.gaming and not True: # Disabled for now.
         if len(trigger.group(1).split()) == 1:
             attempt_az(bot,trigger,word=trigger.group(1).split()[0])
         
@@ -104,6 +109,14 @@ def azrange(bot,trigger):
     if bot.config.azgame.gaming:
         bot.say("Range is {} -- {}".format(bot.config.azgame.wordlist[0],
                                            bot.config.azgame.wordlist[-1]))
+    else:
+        bot.reply("Start a game with $startaz first.")
+        
+@module.commands("azchan")
+def azchan(bot,trigger):
+    """Outputs the channel the current game of az was started in."""
+    if bot.config.azgame.gaming and bot.config.azgame.startchan is not None:
+        bot.say("Current game started in " + bot.config.azgame.startchan)
     else:
         bot.reply("Start a game with $startaz first.")
 

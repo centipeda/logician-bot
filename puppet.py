@@ -10,6 +10,15 @@ def setup(bot):
     bot.config.define_section("puppet",PuppetConfig)
     bot.config.puppet.saychan = None
     bot.config.puppet.echo = False
+    
+@commands("chkdebug")
+def debug(bot,trigger):
+    [bot.say(x) for x in bot.enabled_capabilities]
+    [bot.say(str(y)) for y in bot.server_capabilities]
+    bot.say(str(trigger.account))
+    bot.say(str(trigger.owner))
+    bot.say(str(trigger.user))
+    print bot.server_capabilities
 
 @require_admin()
 @commands("do")
@@ -37,5 +46,15 @@ def toggleecho(bot,trigger):
 @require_admin()
 @rule("(.)*")
 def echo(bot,trigger):
-    if bot.config.puppet.echo and (trigger.match.string != "toggleecho"):
+    text = trigger.match.string
+    if bot.config.puppet.echo and (text != "toggleecho" or trigger.match.s) and trigger.is_privmsg:
         bot.say(trigger.match.string,bot.config.puppet.saychan)
+        
+class BotError(Exception):
+    pass
+    
+@require_admin("Hey, you shouldn't be doing that.")
+@commands("throw")
+def throw(bot,trigger):
+    """Raises an exception."""
+    raise BotError("The fuck did you do that for?")

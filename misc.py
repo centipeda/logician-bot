@@ -59,9 +59,3 @@ def lenny(bot,trigger):
 @rule("[Yy]ou like that, Logic(ian)?")
 def lennyface(bot,trigger):
     bot.say("( ͡° ͜ʖ ͡°)")
-
-@require_admin()
-@commands("throw")
-def throw(bot,trigger):
-    """Raises an exception."""
-    raise Exception
