@@ -25,7 +25,7 @@ class MiscConfig(StaticSection):
                 "Maybe!",
                 "Sorry, what was that?"]
     answers = ValidatedAttribute("answers",list,default=ballansw)
-    quipfile = ValidatedAttribute("quipfile",str,default="/home/crit/.sopel/modules/1liners.cap")
+    quipfile = ValidatedAttribute("quipfile",str,default="/home/pi/.sopel/modules/1liners.cap")
     quiplist = ValidatedAttribute("quiplist",list,default=[])
 
 def setup(bot):

@@ -8,20 +8,30 @@ from sopel.config import Config
 from sopel.db import SopelDB
 
 import sqlite3
-    
+
+class AZConfig(StaticSection):
+    gamechan = ValidatedAttribute("gamechan",str,default="#LogicianGames")
+
 def setup(bot):
-    bot.config.define_section('azgame',StaticSection)
+    bot.config.define_section('azgame',AZConfig)
     bot.db.connect()
     bot.config.azgame.gaming = None
-    bot.config.azgame.cheated = False
-    bot.config.azgame.startchan = None
+
+"""
+@module.commands("azgame")
+def aboutaz(bot,trigger):
+    pass
+"""
     
+@module.require_chanmsg("Not in a channel.")
 @module.commands("startaz","azgame","azstart")
 def startaz(bot,trigger):
     """Starts a game of az.
     Usage: $startaz"""
     if bot.config.azgame.gaming:
         bot.reply("End the current game with $endaz first.")
+    elif trigger.sender != bot.config.azgame.gamechan:
+        bot.reply("Games can currently only be played in {}.".format(bot.config.azgame.gamechan))
     else:
         bot.say("Warming up...")
         bot.config.azgame.baselist = [word[0].encode('ascii') for word in bot.db.execute("SELECT word from wordlist;")]
@@ -30,18 +40,14 @@ def startaz(bot,trigger):
         bot.config.azgame.answer = random.choice(blist)
         bot.say("Range is {} -- {}".format(blist[0],blist[-1]))
         bot.config.azgame.gaming = True
-        if not trigger.is_privmsg:
-            bot.config.azgame.startchan = trigger.sender
 
 @module.commands("endaz","azquit","azend","quitaz")
 def end_az(bot,trigger):
     """Ends a game of az.
     Usage: $endaz"""
-    if bot.config.azgame.gaming and bot.config.azgame.startchan is not None:
-        if trigger.sender == bot.config.azgame.startchan or trigger.sender == bot.owner:
-            bot.config.azgame.gaming = False    
-            bot.say("Game ended, the winning word was {}. Blame {}!".format(bot.config.azgame.answer,
-                                                                            trigger.nick))
+    if bot.config.azgame.gaming and trigger.sender == bot.config.azgame.gamechan:
+        bot.config.azgame.gaming = False    
+        bot.say("Game ended, the winning word was {}. Blame {}!".format(bot.config.azgame.answer,trigger.nick))
     else:
         bot.reply("Start a game using $startaz first.")
 
@@ -54,6 +60,8 @@ def attempt_az(bot,trigger,word=None):
         bot.reply("Start a game using $startaz first.")
     elif trigger.group(2) is None:
         pass
+    elif trigger.sender != bot.config.azgame.gamechan:
+        bot.reply("You can play in {}.".format(bot.config.azgame.gamechan))
     else:
         solution = bot.config.azgame.answer
         wlist = bot.config.azgame.wordlist[::]
@@ -91,13 +99,11 @@ def az_win(bot,trigger):
     else:
         pastwinner = bot.db.execute("SELECT * FROM azstats WHERE userswon = ?;",(trigger.nick,))
     """
-    
-
 
 @module.rule("(.)*")
 def freeattempt(bot,trigger):
     """Makes it so $az isn't needed to play."""
-    if bot.config.azgame.gaming and not True: # Disabled for now.
+    if bot.config.azgame.gaming and not True: # Disabled
         if len(trigger.group(1).split()) == 1:
             attempt_az(bot,trigger,word=trigger.group(1).split()[0])
         
@@ -106,7 +112,7 @@ def freeattempt(bot,trigger):
 def azrange(bot,trigger):
     """Outputs the current range of a game of az.
     Usage: $azrange"""
-    if bot.config.azgame.gaming:
+    if bot.config.azgame.gaming and trigger.sender == bot.config.azgame.gamechan:
         bot.say("Range is {} -- {}".format(bot.config.azgame.wordlist[0],
                                            bot.config.azgame.wordlist[-1]))
     else:
@@ -115,7 +121,7 @@ def azrange(bot,trigger):
 @module.commands("azchan")
 def azchan(bot,trigger):
     """Outputs the channel the current game of az was started in."""
-    if bot.config.azgame.gaming and bot.config.azgame.startchan is not None:
+    if bot.config.azgame.gaming and bot.config.azgame.startchan is not None and not True: # Disabled
         bot.say("Current game started in " + bot.config.azgame.startchan)
     else:
         bot.reply("Start a game with $startaz first.")
@@ -125,7 +131,7 @@ def azchan(bot,trigger):
 def azanswer(bot,trigger):
     """Outputs the answer of the current game of az. Admin-only command.
     Usage: $azanswer"""
-    if bot.config.azgame.gaming:
+    if bot.config.azgame.gaming and not True: # Disabled
         bot.say("The answer is " + bot.config.azgame.answer + ".")
         bot.say("...Cheater.")
         bot.config.azgame.cheated = True
@@ -136,7 +142,7 @@ def azset(bot,trigger):
     """Changes the answer to a game of az.
     Be careful that the new answer is within the current range, or weird stuff happens.
     Usage: $azset newanswer"""
-    if bot.config.azgame.gaming:
+    if bot.config.azgame.gaming and not True: # Disabled
         bot.config.azgame.answer = trigger.group(2)
         bot.say("Answer set to " + bot.config.azgame.answer,trigger.sender)
         bot.config.azgame.altered = True

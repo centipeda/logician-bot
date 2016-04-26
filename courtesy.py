@@ -21,7 +21,7 @@ def setup(bot):
 @sopel.module.rule("(.)*")
 def greetjoin(bot,trigger):
     """Greets users on entering."""
-    if bot.config.courtesy.greet and trigger.sender == "#reddit-intp" and trigger.group(1) != bot.nick:
+    if bot.config.courtesy.greet and trigger.sender == "#reddit-intp" and trigger.group(1) != bot.nick and not True: # Disabled.
         bot.say("Welcome to {}! Type $help to find out more about what I can do. I'm normally pretty quiet in chat, but if you say the right things I might just respond.".format(trigger.sender))
 
 @sopel.module.require_admin("Not an admin.")
@@ -59,57 +59,68 @@ def nofight(bot,trigger):
     Usage: $fight"""
     bot.say("No!")
 
+@sopel.module.rate(300)
 @sopel.module.rule("(Nice|Good|Hard)( game | az | answer | one )?(,)? Logic(ian)?(.)?")
 def thanks(bot,trigger):
     """Logician appreciates being complimented."""
     bot.say("Thank you.")
 
+@sopel.module.rate(300)
 @sopel.module.rule("(I|We) (like|love|appreciate|am interested in| are interested in) Logic(ian)?(.)?")
 def wink(bot,trigger):
     """Of course, Logician also appreciates affection."""
     bot.say(";)")
 
+@sopel.module.rate(300)
 @sopel.module.rule("Give( us)? (an easier|an easy) (word|answer|az| game)(,)? Logic(ian)?(.)?")
 def no(bot,trigger):
     """Logician doesn't let up."""
     bot.say("No.")
 
+@sopel.module.rate(300)
 @sopel.module.rule("(Logic(ian)? is (the best|the superior bot|boss|the best bot))|(INTP(s)? are the best( type)?(.)?)")
 def best(bot,trigger):
     """Logician is the best."""
     bot.say("Damn straight.")
 
+@sopel.module.rate(300)
 @sopel.module.rule("[Tt]hanks, Logic(ian)?([!.])?")
 def thank(bot,trigger):
     """Says 'You're welcome'."""
     bot.say("No problem!")
 
+@sopel.module.rate(300)
 @sopel.module.rule("ty logic")
 def thank_short(bot,trigger):
     """Same as thank()."""
     bot.say("np")
 
+@sopel.module.rate(300)
 @sopel.module.rule("[Ww]hy, Logic(ian)?\?")
 def retort(bot,trigger):
     """Defends Logician's position."""
     bot.say("Well, why not?")
 
+@sopel.module.rate(300)
 @sopel.module.rule("(R|r)ight, Logic(ian)?")
 def unsure(bot,trigger):
     """What happens when you don't pay attention."""
     bot.say("Umm...")
     bot.say("Yes!")
 
+@sopel.module.rate(300)
 @sopel.module.rule("((I |We |They |You )?(hate|hates|dislike|dislikes|doesn't want|don't want) (this bot|Logic(ian)?(.)?))|((god)?dammit Logic(ian)?(.)?)")
 def sad(bot,trigger):
     """Not upset, just saddened."""
     bot.say(":(")
-                   
+
+@sopel.module.rate(300)
 @sopel.module.rule("[Ww]hat do you think, Logic(ian)?\?")
 def opinion(bot,trigger):
     """Gives Logic's opinion on things."""
     bot.say("I don't generally have an opinion on things.")
 
+@sopel.module.rate(300)
 @sopel.module.rule("(what's up|sup|wassup), Logic(ian)?\?")
 def wassup(bot,trigger):
     """Says what is up."""
