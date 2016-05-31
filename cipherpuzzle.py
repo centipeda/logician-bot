@@ -44,8 +44,7 @@ def addpuzzle(bot,trigger):
     try:
         bot.db.execute("INSERT INTO puzzlelist (raw,encoded,solved,owner) VALUES (?,?,?,?);",[coded[1],coded[0],0,trigger.sender])
     except sqlite3.OperationalError:
-        bot.say("...Hey, did you try an SQL injection attack?")
-
+        bot.say("Oops, looks like something went wrong. Try again, or tell centipeda.")
     x = bot.db.execute("SELECT * FROM puzzlelist WHERE ID = (SELECT MAX(ID) FROM puzzlelist);")
     id = str([x for x in x][0][0])
     bot.reply("Puzzle ID is " + id)
@@ -54,13 +53,21 @@ def addpuzzle(bot,trigger):
 def listpuzzles(bot,trigger):
     """Outputs all the puzzles currently in the Logician cipherpuzzle database.
     Usage: $listpuzzles"""
-    p = bot.db.execute("SELECT id, encoded, owner FROM puzzlelist;")
-    puzzles = [p for p in p]
-    bot.say("Puzzles in database:")
-    for puzzle in puzzles:
-        bot.say("Puzzle #{}: '{}', added by {}".format(puzzle[0],puzzle[1],puzzle[2]))
+    try:
+        puz = int(trigger.group(2))
+    except (ValueError, TypeError):
+	puzzles = bot.db.execute("SELECT id, encoded, owner FROM puzzlelist;").fetchall()
+        bot.say("Puzzles in database:",trigger.nick)
+        for puzzle in puzzles:
+            bot.say("Puzzle #{}: '{}', added by {}".format(puzzle[0],puzzle[1],puzzle[2]),trigger.nick)
+    else:
+        try:
+            p = bot.db.execute("SELECT id, encoded, owner FROM puzzlelist where ID = ?;",(puz,)).fetchone()
+            bot.say("Puzzle #{}: '{}', added by {}".format(p[0],p[1],p[2]))
+	except:
+            return 1
 
-@require_privmsg("Ask via /msg.")
+@require_privmsg("Ask via private message.")
 @commands("showsolved")
 def showsolved(bot,trigger):
     """Outputs solutions to currently solved puzzles.

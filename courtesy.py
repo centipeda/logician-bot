@@ -31,11 +31,22 @@ def togglegreet(bot,trigger):
     bot.config.courtesy.greet = not bot.config.courtesy.greet
     bot.say("Greet setting toggled.")
 
+@sopel.module.require_admin("Not an admin.")
+@sopel.module.commands("notify","notice",)
+def notice(bot,trigger):
+    """Sends an CTCP NOTICE to the specified nick/channel."""
+    args = trigger.group(2).split()
+    bot.notice(" ".join(args[1:]),args[0])
+
 @sopel.module.commands('about','aboutme')
 def about(bot,trigger):
     """Displays basic information about Logician.
     Usage: $about"""
-    bot.say("I\'m a bot originally created by centipeda for #reddit-intp. I run using Sopel (https://sopel.chat). Type $help for a full list of what I can do.")
+    if trigger.nick == bot.config.core.owner:
+        recep = "shitty programmer"
+    else:
+        recep = trigger.nick
+    bot.say("Hi, {}. I\'m a bot originally created by centipeda. I run using Sopel (https://sopel.chat). Type $help for a full list of what I can do.".format(recep))
 
 @sopel.module.commands('greet')
 def greet(bot,trigger):
@@ -125,3 +136,8 @@ def opinion(bot,trigger):
 def wassup(bot,trigger):
     """Says what is up."""
     bot.say("Quarks.")
+
+@sopel.module.rate(300)
+@sopel.module.rule("[Tt]ech support([?!. ])?")
+def it(bot,trigger):
+    bot.action("downloads Adobe Reader")

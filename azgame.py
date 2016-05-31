@@ -100,12 +100,12 @@ def az_win(bot,trigger):
         pastwinner = bot.db.execute("SELECT * FROM azstats WHERE userswon = ?;",(trigger.nick,))
     """
 
-@module.rule("(.)*")
+# @module.rule(".*")
 def freeattempt(bot,trigger):
     """Makes it so $az isn't needed to play."""
-    if bot.config.azgame.gaming and not True: # Disabled
-        if len(trigger.group(1).split()) == 1:
-            attempt_az(bot,trigger,word=trigger.group(1).split()[0])
+    if bot.config.azgame.gaming:
+        if len(trigger.group(0).split()) == 1:
+            attempt_az(bot,trigger,word=trigger.group(0).split()[0])
         
 
 @module.commands("azrange","rangeaz")

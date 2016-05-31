@@ -47,7 +47,9 @@ def setup(bot):
 @commands("8ball","8b","eightball")
 def eightball(bot,trigger):
     """Consult the magic 8-ball for answers."""
-    if trigger.group(2)[-1] != "?":
+    if trigger.group(2) is None:
+        return None
+    elif trigger.group(2)[-1] != "?":
         bot.reply("Please ask a yes or no question.")
     else:
         # bot.reply(random.choice(bot.config.miscellaneous.answers))
@@ -55,6 +57,14 @@ def eightball(bot,trigger):
         for char in trigger.group(2)[::-1]:
             total += ord(char)
         bot.reply(bot.config.misc.answers[total % len(bot.config.misc.answers)])
+
+@commands("flip","flipcoin")
+def flip_coin(bot,trigger):
+    """Flips a coin and prints the result."""
+    if trigger.group(2) is not None and type(eval(trigger.group(2))) == int:
+        bot.reply(", ".join([random.choice(("Heads","Tails")) for n in range(eval(trigger.group(2)))]))
+    else:
+        bot.reply(random.choice(["Heads!","Tails!"]))
         
 @commands("inventory","inv","in")
 def inventory(bot,trigger):
@@ -121,6 +131,21 @@ def quip(bot,trigger):
         bot.say(bot.config.misc.quiplist[eval(trigger.group(2)) - 1])
     else:
         bot.say(random.choice(bot.config.misc.quiplist))
+
+@commands("complain","complaint","cmpln")
+def complain(bot, trigger):
+    """Registers a complaint with Logician"""
+    complaint = trigger.group(2)
+    bot.db.execute("INSERT INTO complaints (victim,complaint) VALUES (?,?);",(trigger.nick,complaint))
+    bot.say("Complaint '{}' filed. Thanks for your input!".format(complaint))
+
+@require_admin("Only my administrators can view complaints.")
+@commands("complaints")
+def complaints(bot, trigger):
+    """Displays all the currently registered complaints."""
+    compls = bot.db.execute("SELECT * FROM complaints;").fetchall()
+    for comp in compls:
+        bot.say("Complaint #{}: '{}', filed by {}".format(str(comp[0]),comp[2],comp[1]),trigger.nick)
 
 @commands("douse","mindbleach","bleach")
 def douse(bot,trigger):
