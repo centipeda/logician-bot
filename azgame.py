@@ -28,10 +28,10 @@ def aboutaz(bot,trigger):
 def startaz(bot,trigger):
     """Starts a game of az.
     Usage: $startaz"""
-    if bot.config.azgame.gaming:
-        bot.reply("End the current game with $endaz first.")
-    elif trigger.sender != bot.config.azgame.gamechan:
+    if trigger.sender != bot.config.azgame.gamechan:
         bot.reply("Games can currently only be played in {}.".format(bot.config.azgame.gamechan))
+    elif bot.config.azgame.gaming:
+        bot.reply("End the current game with $endaz first.")
     else:
         bot.say("Warming up...")
         bot.config.azgame.baselist = [word[0].encode('ascii') for word in bot.db.execute("SELECT word from wordlist;")]
@@ -49,7 +49,10 @@ def end_az(bot,trigger):
         bot.config.azgame.gaming = False    
         bot.say("Game ended, the winning word was {}. Blame {}!".format(bot.config.azgame.answer,trigger.nick))
     else:
-        bot.reply("Start a game using $startaz first.")
+        if trigger.sender != bot.config.azgame.gamechan:
+            bot.reply("Games can currently only be played in {}.".format(bot.config.azgame.gamechan))
+        else:
+            bot.reply("Start a game using $startaz first.")
 
 @module.commands("az")
 def attempt_az(bot,trigger,word=None):
@@ -131,7 +134,7 @@ def azchan(bot,trigger):
 def azanswer(bot,trigger):
     """Outputs the answer of the current game of az. Admin-only command.
     Usage: $azanswer"""
-    if bot.config.azgame.gaming and not True: # Disabled
+    if bot.config.azgame.gaming:
         bot.say("The answer is " + bot.config.azgame.answer + ".")
         bot.say("...Cheater.")
         bot.config.azgame.cheated = True
@@ -142,7 +145,7 @@ def azset(bot,trigger):
     """Changes the answer to a game of az.
     Be careful that the new answer is within the current range, or weird stuff happens.
     Usage: $azset newanswer"""
-    if bot.config.azgame.gaming and not True: # Disabled
+    if bot.config.azgame.gaming:
         bot.config.azgame.answer = trigger.group(2)
         bot.say("Answer set to " + bot.config.azgame.answer,trigger.sender)
         bot.config.azgame.altered = True
