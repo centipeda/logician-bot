@@ -67,3 +67,4 @@ target/
 
 #extra
 *.bak
+*logician.py*

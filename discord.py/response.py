@@ -31,7 +31,8 @@ class CustomResponses(object):
             if phrase == trigger[0]:
                 await self.bot.say("Reaction already implemented!")
                 return
-        c.execute("INSERT INTO reactions (trigger, reaction) VALUES (?,?)",(phrase, reaction))
+        self.bot.db.execute("INSERT INTO reactions (trigger, reaction) VALUES (?,?)",(phrase, reaction))
+        self.bot.db.commit()
         await self.bot.say("Reaction `{}` added!".format(phrase))
         self.reactions = self.load_reactions()
 
@@ -42,7 +43,8 @@ class CustomResponses(object):
         c.execute("SELECT trigger FROM reactions;")
         for trigger in c.fetchall():
             if phrase == trigger[0]:
-                c.execute("DELETE FROM reactions WHERE trigger = ?",(phrase,))
+                self.bot.db.execute("DELETE FROM reactions WHERE trigger = ?",(phrase,))
+                self.bot.db.commit()
                 await self.bot.say("Reaction `{}` deleted!".format(phrase))
         self.reactions = self.load_reactions()
 

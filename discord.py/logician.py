@@ -1,4 +1,4 @@
-# Serenity
+# Logician
 
 import sqlite3
 import random
@@ -12,17 +12,19 @@ ownerIds = [
 ]
 moduleDir = "modules"
 dbName = "logic.db"
-botToken = "MjIwNTA5MTUyNjA1MjQxMzQ1.CqhU8Q.cKKwIuQggYUQdAJOauFouAddNww"
-description = """Testing version for Logician."""
+botToken = "MjE1MjIzNTQxNjMxNjgwNTEy.Cqwnrg.70AtEEUSDdLIJPSbiBMyu3-jgUQ"
+description = """A simple bot for Discord."""
 startupExtensions = ["azgame","ttt","response","status"]
+prefix = "$"
 
-bot = commands.Bot(command_prefix="*",description=description)
+bot = commands.Bot(command_prefix=prefix,description=description)
 
 @bot.event
 async def on_ready():
     print("Current login: ")
     print(bot.user.name)
     print(bot.user.id)
+    print("Prefix: " + prefix)
 
     bot.dbName = dbName
     print("Connecting to database...")
