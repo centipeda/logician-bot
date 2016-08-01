@@ -79,7 +79,6 @@ def showsolved(bot,trigger):
         bot.say("Puzzle #{}: {}".format(puzzle[0],puzzle[2]),trigger.sender)
         bot.say("Solution: {}".format(puzzle[1]),trigger.sender)
         bot.say("First solved by {}".format(puzzle[4]))
-        
 
 @commands("solve","solvepuzzle","solvefor")
 def solve(bot,trigger):
