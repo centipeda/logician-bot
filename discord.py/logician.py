@@ -16,7 +16,7 @@ botToken = "MjE1MjIzNTQxNjMxNjgwNTEy.Cqwnrg.70AtEEUSDdLIJPSbiBMyu3-jgUQ"
 subToken = "MjIwNTA5MTUyNjA1MjQxMzQ1.CqzjCg.8nbVlfQxTxcQhhFBG0hGZGbBqZ4"
 startupExtensions = ["azgame","ttt","response","status"]
 
-token = subToken
+token = botToken
 if token == botToken:
     description = """A simple bot for Discord."""
     prefix = "$"
