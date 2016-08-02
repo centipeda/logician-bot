@@ -10,11 +10,10 @@ from discord.ext import commands
 ownerIds = [
     185877810760515585
 ]
-moduleDir = "modules"
 dbName = "logic.db"
 botToken = "MjE1MjIzNTQxNjMxNjgwNTEy.Cqwnrg.70AtEEUSDdLIJPSbiBMyu3-jgUQ"
 subToken = "MjIwNTA5MTUyNjA1MjQxMzQ1.CqzjCg.8nbVlfQxTxcQhhFBG0hGZGbBqZ4"
-startupExtensions = ["azgame","ttt","response","status"]
+startupExtensions = ["azgame","ttt","response","status","admin"]
 
 token = botToken
 if token == botToken:
@@ -32,6 +31,8 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print("Prefix: " + prefix)
+    print("Owners: " + str(ownerIds))
+    bot.owners = ownerIds
 
     bot.dbName = dbName
     print("Connecting to database...")
@@ -40,42 +41,12 @@ async def on_ready():
 
     for extension in startupExtensions:
         try:
-            # modpath = os.path.join(os.getcwd(), moduleDir, extension + ".py")
-            # print(modpath)
             bot.load_extension(extension)
         except Exception as e:
             print("extension {} not loaded: ".format(extension))
-            print(e)
+            print("{}: {}".format(type(e).__name__,e))
 
     print("Ready to begin!")
-
-@bot.command()
-async def loadext(extension_name: str):
-    try:
-        bot.load_extension(extension_name)
-    except Exception as e:
-        print(e)
-        await bot.say("Failed to load extension `{}`.".format(extension_name))
-        return
-    print("Successfully loaded extension {}.".format(extension_name))
-    await bot.say("Loaded extension `{}`.".format(extension_name))
-
-@bot.command()
-async def unloadext(extension_name: str):
-    bot.unload_extension(extension_name)
-    print("Unloaded " + extension_name)
-    await bot.say("Unloaded extension `{}`.".format(extension_name))
-
-@bot.command()
-async def reloadext(extension_name: str):
-    bot.unload_extension(extension_name)
-    try:
-        bot.load_extension(extension_name)
-    except Exception as e:
-        print(e)
-        await bot.say("Failed to load extension `{}`.".format(extension_name))
-        return
-    await bot.say("Reloaded extension `{}`.".format(extension_name))
 
 @bot.command()
 async def echo(msg : str):
