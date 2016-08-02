@@ -60,15 +60,6 @@ class Administration(object):
         await self.bot.say("Bye-bye!")
         await self.bot.close()
 
-"""
-    @commands.command(hidden=True)
-    @is_owner()
-    async def restart(self):
-        await self.bot.say("Restarting...")
-        await self.bot.close()
-        self.bot.run(self.bot.token)
-"""
-
     @commands.command(hidden=True)
     @is_owner()
     async def pull(self):
