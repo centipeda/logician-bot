@@ -14,7 +14,7 @@ class Administration(object):
 
     def __init__(self, bot):
         self.bot = bot
-        self.repodir = '/home/centipeda/Github/logician-bot/'
+        self.repodir = '/home/pi/Github/logician-bot'
         print("Connecting to repo...")
         self.repo = git.Repo(self.repodir)
         print("Connected!")
