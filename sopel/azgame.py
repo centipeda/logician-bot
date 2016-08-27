@@ -22,7 +22,7 @@ def setup(bot):
 def aboutaz(bot,trigger):
     pass
 """
-    
+
 @module.require_chanmsg("Not in a channel.")
 @module.commands("startaz","azgame","azstart")
 def startaz(bot,trigger):
@@ -46,7 +46,7 @@ def end_az(bot,trigger):
     """Ends a game of az.
     Usage: $endaz"""
     if bot.config.azgame.gaming and trigger.sender == bot.config.azgame.gamechan:
-        bot.config.azgame.gaming = False    
+        bot.config.azgame.gaming = False
         bot.say("Game ended, the winning word was {}. Blame {}!".format(bot.config.azgame.answer,trigger.nick))
     else:
         if trigger.sender != bot.config.azgame.gamechan:
@@ -59,7 +59,7 @@ def attempt_az(bot,trigger,word=None):
     """Tries to redefine the word range by seeing if a given word is in the range.
     If the solution is given, the winner is recognized and the game ends.
     Usage: $az word"""
-    if not bot.config.azgame.gaming:
+   if not bot.config.azgame.gaming:
         bot.reply("Start a game using $startaz first.")
     elif trigger.group(2) is None:
         pass
@@ -109,7 +109,6 @@ def freeattempt(bot,trigger):
     if bot.config.azgame.gaming:
         if len(trigger.group(0).split()) == 1:
             attempt_az(bot,trigger,word=trigger.group(0).split()[0])
-        
 
 @module.commands("azrange","rangeaz")
 def azrange(bot,trigger):
@@ -120,7 +119,7 @@ def azrange(bot,trigger):
                                            bot.config.azgame.wordlist[-1]))
     else:
         bot.reply("Start a game with $startaz first.")
-        
+
 @module.commands("azchan")
 def azchan(bot,trigger):
     """Outputs the channel the current game of az was started in."""
