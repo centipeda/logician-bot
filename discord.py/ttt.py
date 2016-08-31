@@ -30,10 +30,25 @@ class TicTacToe(object):
                 self.game.board[x][y] = tictactoe.OPPONENT_SYMBOL
                 await self.bot.say("Your move: {} {}".format(x,y))
                 await self.bot.say("```{}```".format(self.game.__str__()))
+                await self.bot.say("My turn!")
+                self.game = self.ai.move(self.game)
+                await self.bot.say("```{}```".format(self.game.__str__()))
             else:
                 print("I'm moving first")
                 self.game = self.ai.starter_move(self.game)
                 await self.bot.say("```{}```".format(self.game.__str__()))
+
+        else:
+            self.game.board[x][y] = tictactoe.OPPONENT_SYMBOL
+            await self.bot.say("Your move: {} {}".format(x,y))
+            await self.bot.say("```{}```".format(self.game.__str__()))
+            if await self.check_win():
+                return
+            await self.bot.say("My turn!")
+            self.game = self.ai.move(self.game)
+            await self.bot.say("```{}```".format(self.game.__str__()))
+            if await self.check_win():
+                return
 
     @ttt.group(pass_context = True)
     async def end(self, ctx):
@@ -51,5 +66,24 @@ class TicTacToe(object):
         if self.playing:
             await self.bot.say("Board state:")
             await self.bot.say("```{}```".format(self.game.__str__()))
+
+    async def check_win(self):
+        pts = tictactoe.check_win(self.game.board)
+        if pts is not None:
+            if pts == 10:
+                await self.bot.say("Hah! I knew I'd win!")
+            elif pts == -10:
+                await self.bot.say("What?! How?!")
+            elif pts == 0:
+                await self.bot.say("A draw, then.")
+
+            await self.bot.say("```Final state:\n{}```".format(self.game.__str__()))
+            self.playing = False
+            self.game = tictactoe.BeginningState()
+
+            return True
+        else:
+            return False
+
 def setup(bot):
     bot.add_cog(TicTacToe(bot))

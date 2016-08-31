@@ -7,11 +7,11 @@ ownerIds = [
     185877810760515585
 ]
 db_name = "logic.db"
-botToken = "MjE1MjIzNTQxNjMxNjgwNTEy.CpUaEQ.K3QAh9jeFwPFYoUfHBmq4RMhiMU"
-description = """A first attempt at using discord.py to create a bot."""
+botToken = "MjIwNTA5MTUyNjA1MjQxMzQ1.CqhU8Q.cKKwIuQggYUQdAJOauFouAddNww"
+description = """Testing version for Logician."""
 startupExtensions = ["azgame","ttt"]
 
-bot = commands.Bot(command_prefix="$",description=description)
+bot = commands.Bot(command_prefix="*",description=description)
 
 @bot.event
 async def on_ready():
@@ -36,7 +36,7 @@ async def loadext(extension_name: str):
         await bot.say("Failed to load extension `{}`.".format(extension_name))
         return
     print("Successfully loaded extension {}.".format(extension_name))
-    await bot.say("Loaded `{}`.".format(extension_name))
+    await bot.say("Loaded extension `{}`.".format(extension_name))
 
 @bot.command()
 async def unloadext(extension_name: str):
@@ -46,7 +46,9 @@ async def unloadext(extension_name: str):
 
 @bot.command()
 async def reloadext(extension_name: str):
+    bot.unload_extension(extension_name)
     bot.load_extension(extension_name)
+    await bot.say("Reloaded extension `{}`.".format(extension_name))
 
 @bot.command(pass_context = True)
 async def doyouloveme(cxt, phrase : str):
