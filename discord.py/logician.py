@@ -14,7 +14,7 @@ moduleDir = "modules"
 dbName = "logic.db"
 botToken = "MjIwNTA5MTUyNjA1MjQxMzQ1.CqhU8Q.cKKwIuQggYUQdAJOauFouAddNww"
 description = """Testing version for Logician."""
-startupExtensions = ["azgame","ttt","response"]
+startupExtensions = ["azgame","ttt","response","status"]
 
 bot = commands.Bot(command_prefix="*",description=description)
 
