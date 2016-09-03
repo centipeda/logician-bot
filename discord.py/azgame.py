@@ -14,9 +14,6 @@ class AZGame(object):
     def __init__(self, bot):
         self.bot = bot
         self.memory = {"playing": False}
-        print("Connecting to database...")
-        self.db = sqlite3.connect(db_name)
-        print("Connected to {}!".format(db_name))
 
     @commands.command(pass_context=True)
     async def az(self, ctx, option: str):
@@ -51,7 +48,7 @@ class AZGame(object):
     # @self.bot.command
     async def begin_az(self):
         """Loads the word database into memory."""
-        c = self.db.cursor()
+        c = bot.db.cursor()
         print("Loading words from database...")
         c.execute("SELECT word FROM wordlist;")
         self.memory["wordlist"] = []
