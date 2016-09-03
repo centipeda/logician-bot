@@ -36,31 +36,31 @@ class TicTacToe(object):
         """If a game of tic-tac-toe has not already been started, begins one.
         If a starting move is given, lets you move first, otherwise, Logic
         will."""
-        move = self._parse_move(move)
+        crds = self._parse_move(move)
         if not self.playing:
             print("Beginning tic-tac-toe")
             self.playing = True
             await self.bot.reply("let's play!")
-            if move is not False:
-                x = move[0]
-                y = move[1]
+            if move == "second":
+                print("I'm moving first")
+                self.game = self.ai.starter_move(self.game)
+                await self.bot.say("```{}```".format(self.game.__str__()))
+            elif crds is not False:
+                x = crds[0]
+                y = crds[1]
                 print("{} moving first".format(ctx.message.author))
                 self.game.board[x][y] = tictactoe.OPPONENT_SYMBOL
-                await self.bot.say("Your move: {}".format(move))
+                await self.bot.say("Your move: {}".format(crds))
                 await self.bot.say("```{}```".format(self.game.__str__()))
                 await self.bot.say("My turn!")
                 self.game = self.ai.move(self.game)
                 await self.bot.say("```{}```".format(self.game.__str__()))
-            else:
-                print("I'm moving first")
-                self.game = self.ai.starter_move(self.game)
-                await self.bot.say("```{}```".format(self.game.__str__()))
 
         else:
-            x = move[0]
-            y = move[1]
+            x = crds[0]
+            y = crds[1]
             self.game.board[x][y] = tictactoe.OPPONENT_SYMBOL
-            await self.bot.say("Your move: {}".format(move))
+            await self.bot.say("Your move: {}".format(crds))
             await self.bot.say("```{}```".format(self.game.__str__()))
             if await self.check_win():
                 return
