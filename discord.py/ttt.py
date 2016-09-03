@@ -12,23 +12,41 @@ class TicTacToe(object):
         self.game = tictactoe.BeginningState()
         self.ai = tictactoe.AIPlayer()
 
+    def _parse_move(self, move):
+        """Checks if move given is valid."""
+        if not len(move) == 2:
+            return False
+        coords = sorted(list(move))
+        if not (coords[0] in "123") and not (coords[1] in "ABCabc"):
+            return False
+        coords[1] = coords[1].lower()
+        if coords[1] == 'a':
+            x = 0
+        elif coords[1] == 'b':
+            x = 1
+        elif coords[1] == 'c':
+            x = 2
+        return int(coords[0]) - 1,x
     @commands.group(pass_context=True)
     async def ttt(self, ctx):
         """Begins, plays, or ends a game of tic-tac-toe."""
 
     @ttt.group(pass_context = True)
-    async def play(self, ctx, x : int, y : int):
+    async def play(self, ctx, move: str):
         """If a game of tic-tac-toe has not already been started, begins one.
         If a starting move is given, lets you move first, otherwise, Logic
         will."""
+        move = self._parse_move(move)
         if not self.playing:
             print("Beginning tic-tac-toe")
             self.playing = True
-            await self.bot.reply("Let's play!")
-            if x is not None and y is not None:
+            await self.bot.reply("let's play!")
+            if move is not False:
+                x = move[0]
+                y = move[1]
                 print("{} moving first".format(ctx.message.author))
                 self.game.board[x][y] = tictactoe.OPPONENT_SYMBOL
-                await self.bot.say("Your move: {} {}".format(x,y))
+                await self.bot.say("Your move: {}".format(move))
                 await self.bot.say("```{}```".format(self.game.__str__()))
                 await self.bot.say("My turn!")
                 self.game = self.ai.move(self.game)
@@ -39,8 +57,10 @@ class TicTacToe(object):
                 await self.bot.say("```{}```".format(self.game.__str__()))
 
         else:
+            x = move[0]
+            y = move[1]
             self.game.board[x][y] = tictactoe.OPPONENT_SYMBOL
-            await self.bot.say("Your move: {} {}".format(x,y))
+            await self.bot.say("Your move: {}".format(move))
             await self.bot.say("```{}```".format(self.game.__str__()))
             if await self.check_win():
                 return

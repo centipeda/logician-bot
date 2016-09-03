@@ -56,13 +56,16 @@ class GameState(object):
     def __str__(self):
         """Prints the board in a visually appealing way."""
         rows = []
-        rows.append("+-------+")
+        rows.append("    A B C")
+        rows.append(" +-------+")
+        r = 1
         for row in self.board:
             temp = row[::]
-            temp.insert(0,"|")
+            temp.insert(0,str(r) + "|")
             temp.append("|")
             rows.append(" ".join(temp))
-        rows.append("+-------+")
+            r+=1
+        rows.append(" +-------+")
         return "\n".join(rows)
 
     def iterate(self):

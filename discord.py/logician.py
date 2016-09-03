@@ -1,4 +1,4 @@
-# Logician
+# Serenity/Logician
 
 import sqlite3
 import random
@@ -13,9 +13,16 @@ ownerIds = [
 moduleDir = "modules"
 dbName = "logic.db"
 botToken = "MjE1MjIzNTQxNjMxNjgwNTEy.Cqwnrg.70AtEEUSDdLIJPSbiBMyu3-jgUQ"
-description = """A simple bot for Discord."""
+subToken = "MjIwNTA5MTUyNjA1MjQxMzQ1.CqzjCg.8nbVlfQxTxcQhhFBG0hGZGbBqZ4"
 startupExtensions = ["azgame","ttt","response","status"]
-prefix = "$"
+
+token = subToken
+if token == botToken:
+    description = """A simple bot for Discord."""
+    prefix = "$"
+else:
+    description = """Testing version for Logician."""
+    prefix = "*"
 
 bot = commands.Bot(command_prefix=prefix,description=description)
 
@@ -77,4 +84,4 @@ async def echo(msg : str):
     await bot.say(msg)
 
 
-bot.run(botToken)
+bot.run(token)
