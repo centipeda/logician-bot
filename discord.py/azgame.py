@@ -40,7 +40,7 @@ class AZGame(object):
             await self.bot.reply("Start a game with $az start first.")
         else:
             await self.bot.say("Ending the game, the winning word was {}.\nBlame {}!".format(self.memory["solution"],
-              ctx.message.author))
+              ctx.message.author.mention))
             self.memory["playing"] = False
             del self.memory["solution"]
             del self.memory["wordlist"]
@@ -48,7 +48,7 @@ class AZGame(object):
     # @self.bot.command
     async def begin_az(self):
         """Loads the word database into memory."""
-        c = bot.db.cursor()
+        c = self.bot.db.cursor()
         print("Loading words from database...")
         c.execute("SELECT word FROM wordlist;")
         self.memory["wordlist"] = []
