@@ -23,7 +23,7 @@ else:
     description = """Testing version for Logician."""
     prefix = "*"
 
-bot = commands.Bot(command_prefix=prefix,description=description)
+bot = commands.Bot(self_bot=False,command_prefix=prefix,description=description)
 
 @bot.event
 async def on_ready():
@@ -33,6 +33,7 @@ async def on_ready():
     print("Prefix: " + prefix)
     print("Owners: " + str(ownerIds))
     bot.owners = ownerIds
+    bot.token = token
 
     bot.dbName = dbName
     print("Connecting to database...")
