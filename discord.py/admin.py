@@ -48,5 +48,11 @@ class Administration(object):
             return
         await self.bot.say("Reloaded extension `{}`.".format(extension_name))
 
+    @commands.command(hidden=True)
+    @is_owner()
+    async def shutdown(self):
+        """Shuts down."""
+        await self.bot.close()
+
 def setup(bot):
     bot.add_cog(Administration(bot))
