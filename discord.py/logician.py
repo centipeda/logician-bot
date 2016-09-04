@@ -15,7 +15,7 @@ botToken = "MjE1MjIzNTQxNjMxNjgwNTEy.Cqwnrg.70AtEEUSDdLIJPSbiBMyu3-jgUQ"
 subToken = "MjIwNTA5MTUyNjA1MjQxMzQ1.CqzjCg.8nbVlfQxTxcQhhFBG0hGZGbBqZ4"
 startupExtensions = ["azgame","ttt","response","status","admin"]
 
-token = botToken
+token = subToken
 if token == botToken:
     description = """A simple bot for Discord."""
     prefix = "$"
@@ -54,5 +54,8 @@ async def echo(msg : str):
     print("Command received: echo {}".format(msg))
     await bot.say(msg)
 
+@bot.command(pass_context = True)
+async def uid(ctx):
+    await bot.say(str(ctx.message.author.id))
 
 bot.run(token)
