@@ -11,17 +11,16 @@ ownerIds = [
     185877810760515585
 ]
 dbName = "logic.db"
-botToken = "MjE1MjIzNTQxNjMxNjgwNTEy.Cqwnrg.70AtEEUSDdLIJPSbiBMyu3-jgUQ"
-subToken = "MjIwNTA5MTUyNjA1MjQxMzQ1.CqzjCg.8nbVlfQxTxcQhhFBG0hGZGbBqZ4"
 startupExtensions = ["azgame","ttt","response","status","admin"]
 
-token = botToken
+"""
 if token == botToken:
     description = """A simple bot for Discord."""
     prefix = "$"
 else:
     description = """Testing version for Logician."""
     prefix = "*"
+"""
 
 bot = commands.Bot(self_bot=False,command_prefix=prefix,description=description)
 
