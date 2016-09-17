@@ -11,18 +11,13 @@ ownerIds = [
     185877810760515585
 ]
 dbName = "logic.db"
-startupExtensions = ["azgame","ttt","response","status","admin"]
+config = "logician.cfg"
+startupExtensions = ["azgame","ttt","response","status","admin","mbti","pats"]
+prefix = "$"
+with open(config,'r') as cfg:
+    token = cfg.read()[0:-1]
 
-"""
-if token == botToken:
-    description = """A simple bot for Discord."""
-    prefix = "$"
-else:
-    description = """Testing version for Logician."""
-    prefix = "*"
-"""
-
-bot = commands.Bot(self_bot=False,command_prefix=prefix,description=description)
+bot = commands.Bot(self_bot=False,command_prefix=prefix)
 
 @bot.event
 async def on_ready():

@@ -1,6 +1,5 @@
 """Administrator/owner only commands."""
 
-import git
 import discord
 from discord.ext import commands
 
@@ -14,10 +13,6 @@ class Administration(object):
 
     def __init__(self, bot):
         self.bot = bot
-        self.repodir = '/home/pi/Github/logician-bot'
-        print("Connecting to repo...")
-        self.repo = git.Repo(self.repodir)
-        print("Connected!")
 
     @commands.command()
     @is_owner()
@@ -59,12 +54,6 @@ class Administration(object):
         """Shuts down."""
         await self.bot.say("Bye-bye!")
         await self.bot.close()
-
-    @commands.command(hidden=True)
-    @is_owner()
-    async def pull(self):
-        """Refreshes repository."""
-        await self.bot.say("```{}```".format(self.repo.git.pull()))
 
 def setup(bot):
     bot.add_cog(Administration(bot))
