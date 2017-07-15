@@ -21,7 +21,7 @@ class StatusRotater(object):
         while not self.bot.is_closed:
             if self.currentStatus == len(self.statuses):
                 self.currentStatus = 0
-            print("Rotating status to {}".format(self.statuses[self.currentStatus]))
+            # print("Rotating status to {}".format(self.statuses[self.currentStatus]))
             await self.bot.change_status(discord.Game(name=self.statuses[self.currentStatus]))
             await asyncio.sleep(10)
             self.currentStatus += 1

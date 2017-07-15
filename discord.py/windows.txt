@@ -1,0 +1,8 @@
+{0} users (aka children), how's it feel to know there's an entire group of individuals who are better at computers than you are? Meet {1} users. They are better than you.
+
+They understand the hardware better, they understand the basic principles of computer science better, they know how networks work better than you. They understand the pros and cons of filesystems (including ntfs) because on {1}, you get to choose FS's; they understand the principles behind operating system design because they run into phrases like "microkernel" and "monolithic kernels"; they can probably program, too, since learning a scripting language vastly improves productivity on {1} (and this really pisses you off, since programming was one thing you always failed at on {0}.) Oh, and they probably know {0} better than you, since most advanced {1}
+users these days are ex-{0} users who managed to learn {1} years ago, when it was much less user friendly.
+
+At this point, a confident individual would admit to himself he has a lot to learn about {1} and computers in general. But since you lack the self esteem to do that, you run back to {0}, install a MMORPG and keep repeating to yourself "at least I can run games. at least I can run games."
+
+If you're looking for a job, all this hits you even harder, because you realize a lot of the jobs require {1} in one way or another. Even many of the {0} related jobs recommend {1}! At this point, you rationalize "well the only thing I know is {0}, so I must be a {0} expert!" as if knowing only one thing makes you an automatic expert, or that learning {1} forces you to forget {0} entirely.

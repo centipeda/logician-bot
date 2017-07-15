@@ -50,10 +50,18 @@ class Administration(object):
 
     @commands.command(hidden=True)
     @is_owner()
+    async def restart(self):
+        """Restarts."""
+        await self.bot.say("See you in a bit!")
+        await self.bot.close()
+
+    @commands.command(hidden=True)
+    @is_owner()
     async def shutdown(self):
         """Shuts down."""
         await self.bot.say("Bye-bye!")
-        await self.bot.close()
+        self.bot.shutting_down = True
+        await self.bot.logout()
 
 def setup(bot):
     bot.add_cog(Administration(bot))

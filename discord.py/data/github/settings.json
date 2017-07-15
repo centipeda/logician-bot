@@ -1,0 +1,34 @@
+{
+    "github_username" : "logician-monitor",
+    "personal_access_token" : "419b156d6f96f20d889431fad0eed8c47e13beb3",
+    "servers" : {
+        "188684307278069760" : {
+            "interval" : 3600,
+            "notification_method" : [],
+            "repos" : []
+        },
+        "206276256818266112" : {
+            "interval" : 648000,
+            "notification_method" : [
+                "message",
+                "206326891752325122"
+            ],
+            "repos" : [
+                "centipeda/gh-cog-test-repo"
+            ]
+        },
+        "206326891752325122" : {
+            "interval" : 3600,
+            "notification_method" : [],
+            "repos" : [
+                "centipeda/gh-cog-test-repo"
+            ]
+        },
+        "216395595701551114" : {
+            "interval" : 3600,
+            "notification_method" : [],
+            "repos" : []
+        }
+    },
+    "validated" : true
+}
