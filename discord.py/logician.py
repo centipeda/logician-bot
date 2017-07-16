@@ -65,4 +65,4 @@ async def uid(ctx, user : discord.User=None):
         await bot.say(str(ctx.message.author.id))
 
 while True and not bot.shutting_down:
-    bot.run(token)
+    bot.run(configData["token"])
