@@ -43,5 +43,14 @@ class Misc(object):
         else:
             await self.bot.reply(random.choice(self.ball) + ".")
 
+    @commands.command(name="rate")
+    async def rate_user(self, name : str):
+        print("rating {}".format(name))
+        if name.lower() == "coleen":
+            await self.bot.say("I rate {} 100 / 100.".format(name))
+        else:
+            rating = sum([ord(c) for c in name]) % 100
+            await self.bot.say("I rate {} {} / 100.".format(name, rating))
+
 def setup(bot):
     bot.add_cog(Misc(bot))
