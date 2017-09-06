@@ -35,6 +35,10 @@ class Misc(object):
         print(self.bot.owner)
         await self.bot.say(fin)
 
+    @commands.command(name="flip")
+    async def flip_coin(self):
+        await self.bot.say("It's {}.".format(random.choice("heads","tails")))
+
     @commands.command(name="8ball")
     async def eightball(self, *, query : str):
         print(query[-1])
